@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connector Community — Design C Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:#0d0d0d;min-height:100vh;}
+
+/* Preview bar */
+#preview-bar{position:fixed;top:0;left:0;right:0;z-index:99999;height:48px;background:#111;border-bottom:1px solid #252525;display:flex;align-items:center;padding:0 16px;gap:6px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:12px;}
+.pv-lbl{color:#444;font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-right:4px;}
+.tab-btn{background:#1a1a1a;color:#777;border:1px solid #252525;padding:5px 14px;border-radius:4px;cursor:pointer;font-size:12px;font-weight:600;letter-spacing:.3px;transition:all .15s;font-family:inherit;}
+.tab-btn:hover{background:#222;color:#ccc;border-color:#3a3a3a;}
+.tab-btn.active{background:#fff;color:#111;border-color:#fff;}
+.design-page{display:none;padding-top:48px;}
+.design-page.active{display:block;}
+
+/* ── SHARED VARIABLES ── */
+.dc1,.dc2,.dc3{
+  --bg:#ffffff;--bg2:#f7f5f2;--bg3:#ece8e2;
+  --dark:#181410;--text:#1e1a16;--muted:#7a7068;
+  --rust:#b8491a;--rust-l:#d05c28;--rust-d:#8e3410;
+  --border:rgba(184,73,26,.14);
+  font-family:'Nunito',sans-serif;font-size:17px;line-height:1.76;
+  color:var(--text);background:var(--bg);
+}
+
+/* ── SHARED: NAV ── */
+.c-nav{position:sticky;top:48px;z-index:1000;padding:14px 60px;display:flex;align-items:center;justify-content:space-between;background:var(--bg);border-bottom:1px solid var(--border);}
+.c-logo-img{height:52px;width:auto;display:block;}
+.c-nav-cta{display:inline-block;background:var(--rust);color:#fff!important;padding:10px 24px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;text-decoration:none;border-radius:4px;transition:background .2s;}
+.c-nav-cta:hover{background:var(--rust-d);}
+
+/* ── SHARED: HERO ── */
+.c-hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden;}
+.c-hero-left{background:var(--dark);display:flex;flex-direction:column;justify-content:center;padding:100px 60px 80px;position:relative;}
+.c-hero-left::after{content:'';position:absolute;top:0;right:0;bottom:0;width:1px;background:rgba(184,73,26,.3);}
+.c-hero-right{background-image:url('https://www.philtheconnector.com/images/home-banner.webp');background-size:cover;background-position:center;position:relative;clip-path:polygon(8% 0,100% 0,100% 100%,0 100%);}
+.c-hero-right::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(24,20,16,.6) 0%,rgba(24,20,16,.15) 50%,transparent 100%);}
+.c-eyebrow{font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:var(--rust-l);margin-bottom:28px;letter-spacing:.02em;}
+.c-h1{font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,70px);font-weight:700;line-height:1.08;color:#f8f4ee;max-width:540px;margin:0 0 24px;}
+.c-rule{width:60px;height:3px;background:var(--rust);border-radius:2px;margin:0 0 24px;}
+.c-subhead{font-size:17px;line-height:1.7;color:rgba(248,244,238,.7);margin-bottom:40px;}
+.c-cta-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.c-btn-primary{display:inline-block;background:var(--rust);color:#fff!important;padding:15px 36px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;text-decoration:none;border-radius:4px;letter-spacing:.04em;transition:all .25s;}
+.c-btn-primary:hover{background:var(--rust-d);transform:translateY(-2px);}
+.c-btn-secondary{display:inline-block;border:2px solid var(--rust);color:var(--rust)!important;padding:13px 30px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;text-decoration:none;border-radius:4px;transition:all .25s;}
+.c-btn-secondary:hover{background:var(--rust);color:#fff!important;}
+.c-micro{margin-top:20px;font-size:13px;color:rgba(248,244,238,.4);}
+.c-footer{padding:28px 60px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);opacity:.5;text-align:center;background:var(--bg);}
+
+/* ── SHARED: FAQ ── */
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-q{padding:20px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--text);gap:16px;transition:color .2s;}
+.faq-q:hover{color:var(--rust);}
+.faq-q::after{content:'+';color:var(--rust);font-size:24px;font-weight:300;flex-shrink:0;transition:transform .25s;}
+.faq-item.open .faq-q::after{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.faq-a-inner{padding-bottom:20px;color:var(--muted);font-size:16px;line-height:1.78;}
+.faq-item.open .faq-a{max-height:400px;}
+
+/* ════════════════════════════════════════════════
+   C1 — WARM STACK
+   Centered single-column. Intimate, conversational.
+════════════════════════════════════════════════ */
+.s1{padding:88px 60px;background:var(--bg);}
+.s1-dark{padding:88px 60px;background:var(--dark);}
+.s1-beige{padding:88px 60px;background:var(--bg2);}
+.s1-rust{padding:88px 60px;background:var(--rust);}
+.s1-in{max-width:720px;margin:0 auto;text-align:center;}
+.s1-in-left{max-width:720px;margin:0 auto;}
+.s1-tag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rust);margin-bottom:16px;display:block;font-weight:700;}
+.s1-tag-d{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,236,228,.4);margin-bottom:16px;display:block;font-weight:700;}
+.s1-h2{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;line-height:1.18;color:var(--text);margin-bottom:24px;}
+.s1-h2-d{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;line-height:1.18;color:#f0ece4;margin-bottom:24px;}
+.s1-body{color:var(--muted);font-size:17px;line-height:1.82;margin-bottom:16px;}
+.s1-body-d{color:rgba(240,236,228,.58);font-size:17px;line-height:1.82;margin-bottom:16px;}
+.s1-body strong{color:var(--text);}
+.s1-body-d strong{color:#f0ece4;}
+
+/* C1 Phil's Word — centered dark quote block */
+.s1-qblock{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:56px 64px;max-width:760px;margin:0 auto;}
+.s1-qm{font-family:'Playfair Display',serif;font-size:96px;color:var(--rust);line-height:.7;opacity:.65;display:block;margin-bottom:14px;}
+.s1-qlead{font-family:'Playfair Display',serif;font-size:clamp(20px,2.2vw,28px);font-style:italic;color:#f0ece4;line-height:1.5;margin-bottom:28px;}
+.s1-qbody p{color:rgba(240,236,228,.58);font-size:16px;line-height:1.85;margin-bottom:12px;text-align:left;}
+.s1-qbody strong{color:#f0ece4;}
+.s1-qclose{font-family:'Playfair Display',serif;font-style:italic;color:var(--rust-l);font-size:17px;display:block;margin-top:16px;text-align:left;}
+
+/* C1 Gap — centered big italic headline */
+.s1-gap-hl{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,52px);font-style:italic;font-weight:700;line-height:1.2;color:var(--text);margin-bottom:28px;}
+.s1-gap-hl span{color:var(--rust);}
+.s1-rule{width:60px;height:3px;background:var(--rust);border-radius:2px;margin:0 auto 28px;}
+
+/* C1 What It Is — two bordered cards */
+.s1-contrast{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px;text-align:left;}
+.s1-not-card{border:2px solid var(--border);border-radius:8px;padding:36px 28px;background:var(--bg3);}
+.s1-is-card{border:2px solid var(--rust);border-radius:8px;padding:36px 28px;background:var(--bg);}
+.s1-clabel{font-size:10px;letter-spacing:.25em;text-transform:uppercase;font-weight:800;margin-bottom:18px;display:block;}
+.s1-not-card .s1-clabel{color:var(--muted);}
+.s1-is-card .s1-clabel{color:var(--rust);}
+.s1-chead{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:16px;}
+.s1-cpoint{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px;}
+.s1-is-card .s1-cpoint{color:var(--text);}
+.s1-cico{flex-shrink:0;font-size:12px;font-weight:700;margin-top:1px;}
+.s1-not-card .s1-cico{color:var(--muted);}
+.s1-is-card .s1-cico{color:var(--rust);}
+
+/* C1 What You Get — numbered list */
+.s1-get{margin-top:40px;max-width:680px;margin-left:auto;margin-right:auto;}
+.s1-gi{display:flex;align-items:flex-start;gap:24px;padding:24px 0;border-bottom:1px solid var(--border);}
+.s1-gi:last-child{border-bottom:none;}
+.s1-gnum{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--rust);opacity:.22;line-height:1;flex-shrink:0;width:40px;}
+.s1-gtext h4{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.s1-gtext p{font-size:15px;color:var(--muted);line-height:1.65;}
+
+/* C1 How It Works — 3 cards on dark */
+.s1-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px;max-width:900px;margin-left:auto;margin-right:auto;}
+.s1-step{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:32px 24px;text-align:center;}
+.s1-sn{font-family:'Playfair Display',serif;font-size:44px;font-weight:700;color:var(--rust);line-height:1;margin-bottom:14px;}
+.s1-st{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#f0ece4;margin-bottom:10px;}
+.s1-sd{font-size:14px;color:rgba(240,236,228,.48);line-height:1.7;}
+
+/* C1 Who — light pills */
+.s1-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:36px;}
+.s1-pill{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 20px;border-radius:100px;font-size:14px;font-family:'Nunito',sans-serif;}
+.s1-pill-note{font-family:'Playfair Display',serif;font-style:italic;color:var(--muted);font-size:14px;margin-top:24px;display:block;}
+
+/* C1 About — circle photo + centered bio */
+.s1-photo{width:220px;height:220px;border-radius:50%;object-fit:cover;object-position:center top;border:4px solid var(--rust);display:block;margin:0 auto 28px;}
+
+/* C1 Math — big centered stat */
+.s1-bignum{font-family:'Playfair Display',serif;font-size:clamp(80px,14vw,150px);font-weight:700;color:var(--rust);line-height:.9;display:block;margin-bottom:8px;}
+.s1-biglabel{font-family:'Playfair Display',serif;font-style:italic;font-size:22px;color:#f0ece4;display:block;margin-bottom:32px;}
+
+/* C1 Final CTA — rust bg */
+.s1-cta-h{font-family:'Playfair Display',serif;font-size:clamp(34px,5vw,62px);font-weight:700;color:#fff;margin-bottom:16px;line-height:1.1;}
+.s1-cta-rule{width:60px;height:3px;background:rgba(255,255,255,.35);border-radius:2px;margin:0 auto 24px;}
+.s1-cta-body{color:rgba(255,255,255,.7);font-size:18px;margin-bottom:40px;}
+.s1-btn-w{display:inline-block;background:#fff;color:var(--rust)!important;padding:15px 36px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;text-decoration:none;border-radius:4px;transition:all .25s;}
+.s1-btn-w:hover{background:rgba(255,255,255,.9);}
+.s1-btn-o{display:inline-block;border:2px solid rgba(255,255,255,.35);color:#fff!important;padding:13px 30px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;text-decoration:none;border-radius:4px;transition:all .25s;}
+.s1-btn-o:hover{border-color:#fff;background:rgba(255,255,255,.1);}
+.s1-cta-micro{color:rgba(255,255,255,.32);font-size:13px;margin-top:20px;}
+
+/* ════════════════════════════════════════════════
+   C2 — SPLIT / ASYMMETRIC
+   Two-column splits, dark/light contrast panels.
+════════════════════════════════════════════════ */
+.s2-tag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rust);margin-bottom:16px;display:block;font-weight:700;}
+.s2-h2{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;line-height:1.18;color:var(--text);margin-bottom:24px;}
+.s2-body{color:var(--muted);font-size:17px;line-height:1.82;margin-bottom:16px;}
+.s2-body strong{color:var(--text);}
+.s2-in{max-width:1100px;margin:0 auto;}
+.s2-in-m{max-width:900px;margin:0 auto;}
+
+.s2-philword{display:grid;grid-template-columns:400px 1fr;min-height:580px;overflow:hidden;}
+.s2-pw-photo{background-image:url('https://www.philtheconnector.com/images/245fce6f0a6fbfae6355af9d7eac1783c4381029.jpg');background-size:cover;background-position:center top;}
+.s2-pw-content{background:var(--dark);padding:80px 60px;display:flex;flex-direction:column;justify-content:center;}
+.s2-qm{font-family:'Playfair Display',serif;font-size:110px;color:var(--rust);line-height:.7;opacity:.7;display:block;margin-bottom:16px;}
+.s2-qlead{font-family:'Playfair Display',serif;font-size:clamp(18px,2vw,26px);font-style:italic;color:#f0ece4;line-height:1.5;margin-bottom:24px;}
+.s2-qbody p{color:rgba(240,236,228,.58);font-size:16px;line-height:1.85;margin-bottom:12px;}
+.s2-qbody strong{color:#f0ece4;}
+.s2-qclose{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:var(--rust-l);display:block;margin-top:12px;}
+
+.s2-gap{display:grid;grid-template-columns:1fr 1fr;}
+.s2-gap-l{background:var(--dark);padding:96px 72px;display:flex;flex-direction:column;justify-content:center;}
+.s2-gap-acc{width:4px;height:52px;background:var(--rust);margin-bottom:28px;}
+.s2-gap-hl{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,42px);font-style:italic;font-weight:700;line-height:1.22;color:#f0ece4;}
+.s2-gap-hl span{color:var(--rust);}
+.s2-gap-r{background:var(--bg2);padding:96px 72px;display:flex;flex-direction:column;justify-content:center;}
+.s2-gap-r p{font-size:17px;color:var(--muted);line-height:1.85;margin-bottom:16px;}
+.s2-gap-r strong{color:var(--text);}
+
+.s2-whatis{display:grid;grid-template-columns:1fr 1fr;}
+.s2-not{background:var(--bg3);padding:80px 60px;}
+.s2-is{background:var(--rust);padding:80px 60px;}
+.s2-plabel{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;font-family:'Nunito',sans-serif;margin-bottom:28px;display:block;}
+.s2-not .s2-plabel{color:var(--muted);}
+.s2-is .s2-plabel{color:rgba(255,255,255,.5);}
+.s2-phead{font-family:'Playfair Display',serif;font-size:clamp(18px,2vw,26px);font-weight:700;line-height:1.3;margin-bottom:28px;}
+.s2-not .s2-phead{color:var(--text);}
+.s2-is .s2-phead{color:#fff;}
+.s2-pt{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;font-size:15px;line-height:1.65;}
+.s2-not .s2-pt{color:var(--muted);}
+.s2-is .s2-pt{color:rgba(255,255,255,.88);}
+.s2-ico{width:20px;height:20px;border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.s2-not .s2-ico{background:rgba(0,0,0,.08);color:var(--muted);}
+.s2-is .s2-ico{background:rgba(255,255,255,.2);color:#fff;}
+
+.s2-sec{padding:88px 60px;background:var(--bg);}
+.s2-sec-beige{padding:88px 60px;background:var(--bg2);}
+.s2-get-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:40px;}
+.s2-card{background:var(--bg);padding:40px 36px;transition:background .2s;}
+.s2-card:hover{background:var(--bg2);}
+.s2-cn{font-family:'Playfair Display',serif;font-size:50px;font-weight:700;color:var(--rust);opacity:.2;line-height:1;margin-bottom:12px;}
+.s2-card h4{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--text);margin-bottom:10px;}
+.s2-card p{font-size:15px;color:var(--muted);line-height:1.7;}
+
+.s2-timeline{display:grid;grid-template-columns:repeat(3,1fr);max-width:860px;margin:48px auto 0;position:relative;}
+.s2-timeline::before{content:'';position:absolute;top:35px;left:17%;right:17%;height:1px;background:var(--border);}
+.s2-tstep{text-align:center;padding:0 20px;}
+.s2-tnum{width:70px;height:70px;border-radius:50%;border:2px solid var(--rust);background:var(--bg2);color:var(--rust);font-family:'Playfair Display',serif;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;position:relative;z-index:1;}
+.s2-tt{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:10px;line-height:1.3;}
+.s2-td{font-size:14px;color:var(--muted);line-height:1.7;}
+
+.s2-who{background:var(--dark);padding:88px 60px;text-align:center;}
+.s2-wpills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:820px;margin:0 auto 32px;}
+.s2-wpill{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(240,236,228,.72);padding:10px 22px;border-radius:100px;font-size:15px;font-family:'Nunito',sans-serif;transition:all .2s;display:inline-block;}
+.s2-wpill:hover{background:rgba(184,73,26,.2);border-color:var(--rust);color:#f0ece4;}
+.s2-wnote{font-family:'Playfair Display',serif;font-style:italic;color:rgba(240,236,228,.28);font-size:15px;}
+
+.s2-about{display:grid;grid-template-columns:1fr 1fr;min-height:620px;overflow:hidden;}
+.s2-aphoto{background-image:url('https://www.philtheconnector.com/images/245fce6f0a6fbfae6355af9d7eac1783c4381029.jpg');background-size:cover;background-position:center top;}
+.s2-atext{background:var(--bg);padding:80px 72px;display:flex;flex-direction:column;justify-content:center;}
+
+.s2-math{background:var(--dark);padding:88px 60px;text-align:center;}
+.s2-math-hl{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,38px);font-weight:700;color:#f0ece4;margin-bottom:48px;max-width:600px;margin-left:auto;margin-right:auto;}
+.s2-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.07);max-width:800px;margin:0 auto 48px;border:1px solid rgba(255,255,255,.07);}
+.s2-stat{padding:44px 24px;background:rgba(255,255,255,.02);}
+.s2-sbig{font-family:'Playfair Display',serif;font-size:clamp(44px,6vw,76px);font-weight:700;color:var(--rust);line-height:1;display:block;margin-bottom:8px;}
+.s2-slbl{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,236,228,.32);}
+.s2-mbody{max-width:600px;margin:0 auto 16px;color:rgba(240,236,228,.52);font-size:17px;line-height:1.85;}
+.s2-mbody strong{color:#f0ece4;}
+
+.s2-final{background:var(--dark);padding:120px 60px;text-align:center;position:relative;overflow:hidden;}
+.s2-final::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(184,73,26,.14) 0%,transparent 55%),radial-gradient(ellipse at 70% 40%,rgba(184,73,26,.10) 0%,transparent 55%);}
+.s2-final>*{position:relative;z-index:1;}
+.s2-cta-h{font-family:'Playfair Display',serif;font-size:clamp(40px,6vw,70px);font-weight:700;color:#f0ece4;margin-bottom:16px;}
+.s2-cta-rule{width:60px;height:3px;background:var(--rust);border-radius:2px;margin:0 auto 28px;}
+.s2-cta-body{color:rgba(240,236,228,.52);font-size:18px;max-width:540px;margin:0 auto 44px;}
+.s2-cta-micro{color:rgba(240,236,228,.22);font-size:13px;margin-top:20px;}
+.s2-final .c-btn-secondary{border-color:rgba(240,236,228,.25)!important;color:rgba(240,236,228,.5)!important;}
+.s2-final .c-btn-secondary:hover{border-color:rgba(240,236,228,.6)!important;color:#f0ece4!important;background:transparent!important;}
+
+/* ════════════════════════════════════════════════
+   C3 — CINEMATIC
+   Bold typography, full-bleed sections, high drama.
+════════════════════════════════════════════════ */
+.s3-tag{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--rust);margin-bottom:20px;display:block;font-weight:800;}
+.s3-tag-d{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(240,236,228,.4);margin-bottom:20px;display:block;font-weight:800;}
+
+/* C3 Phil's Word — dark, oversized left-aligned quote */
+.s3-philword{background:var(--dark);padding:120px 80px 100px;}
+.s3-pw-inner{max-width:1100px;margin:0 auto;}
+.s3-bigqm{font-family:'Playfair Display',serif;font-size:180px;color:var(--rust);line-height:.6;opacity:.45;display:block;margin-bottom:4px;}
+.s3-qlead{font-family:'Playfair Display',serif;font-size:clamp(26px,3.5vw,50px);font-style:italic;color:#f0ece4;line-height:1.22;max-width:820px;margin-bottom:52px;}
+.s3-qcols{display:grid;grid-template-columns:1fr 1fr;gap:60px;}
+.s3-qcols p{color:rgba(240,236,228,.54);font-size:16px;line-height:1.85;margin-bottom:14px;}
+.s3-qcols strong{color:#f0ece4;}
+.s3-qclose{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:var(--rust-l);margin-top:8px;display:block;}
+
+/* C3 Gap — cinematic dark split */
+.s3-gap{display:grid;grid-template-columns:1fr 1fr;min-height:560px;}
+.s3-gap-l{background:var(--bg3);padding:100px 72px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+.s3-gap-l::before{content:'"';position:absolute;bottom:-60px;right:-20px;font-family:'Playfair Display',serif;font-size:380px;font-weight:700;color:rgba(184,73,26,.08);line-height:1;pointer-events:none;user-select:none;}
+.s3-gap-hl{font-family:'Playfair Display',serif;font-size:clamp(28px,3.8vw,58px);font-style:italic;font-weight:700;line-height:1.1;color:var(--dark);position:relative;z-index:1;}
+.s3-gap-hl span{color:var(--rust);}
+.s3-gap-r{background:var(--bg2);padding:100px 72px;display:flex;flex-direction:column;justify-content:center;}
+.s3-gap-tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:var(--rust);margin-bottom:32px;display:block;}
+.s3-gap-acc{width:40px;height:3px;background:var(--rust);border-radius:2px;margin-bottom:36px;}
+.s3-gap-body p{color:var(--muted);font-size:17px;line-height:1.9;margin-bottom:18px;}
+.s3-gap-body strong{color:var(--text);}
+.s3-gap-callout{margin-top:40px;padding:24px 28px;border-left:3px solid var(--rust);background:var(--bg3);}
+.s3-gap-callout p{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:var(--text);line-height:1.6;margin:0;}
+
+/* C3 What It Is — editorial two-column comparison */
+.s3-whatis{background:var(--bg);padding:100px 80px;}
+.s3-whatis-inner{max-width:1100px;margin:0 auto;}
+.s3-wi-tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:var(--rust);margin-bottom:28px;display:block;text-align:center;}
+.s3-wi-hl{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,52px);font-weight:700;line-height:1.15;color:var(--text);text-align:center;margin-bottom:72px;}
+.s3-wi-cols{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.s3-wi-not{padding:56px 60px 56px 0;border-right:1px solid var(--border);}
+.s3-wi-yes{padding:56px 0 56px 60px;}
+.s3-wi-col-label{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;margin-bottom:24px;display:flex;align-items:center;gap:10px;}
+.s3-wi-not .s3-wi-col-label{color:var(--muted);}
+.s3-wi-yes .s3-wi-col-label{color:var(--rust);}
+.s3-wi-col-label::after{content:'';flex:1;height:1px;background:currentColor;opacity:.25;}
+.s3-wi-col-hl{font-family:'Playfair Display',serif;font-size:clamp(17px,1.8vw,22px);font-weight:700;line-height:1.3;margin-bottom:28px;}
+.s3-wi-not .s3-wi-col-hl{color:var(--muted);}
+.s3-wi-yes .s3-wi-col-hl{color:var(--text);}
+.s3-wi-row{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid var(--border);font-size:15px;line-height:1.55;}
+.s3-wi-not .s3-wi-row{color:var(--muted);}
+.s3-wi-yes .s3-wi-row{color:var(--text);}
+.s3-wi-mk{flex-shrink:0;font-weight:700;font-size:13px;margin-top:1px;}
+.s3-wi-not .s3-wi-mk{color:rgba(122,112,104,.4);}
+.s3-wi-yes .s3-wi-mk{color:var(--rust);}
+
+/* C3 What You Get — 4-col dark tiles */
+.s3-get{background:var(--dark);padding:100px 80px;}
+.s3-get-inner{max-width:1100px;margin:0 auto;}
+.s3-get-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);margin-top:48px;}
+.s3-tile{background:rgba(255,255,255,.02);padding:40px 28px;}
+.s3-tile-n{font-family:'Playfair Display',serif;font-size:54px;font-weight:700;color:var(--rust);opacity:.3;line-height:1;margin-bottom:16px;}
+.s3-tile-t{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#f0ece4;margin-bottom:10px;line-height:1.3;}
+.s3-tile-d{font-size:14px;color:rgba(240,236,228,.44);line-height:1.7;}
+
+/* C3 How It Works — 3 bold blocks with top border */
+.s3-howit{padding:100px 80px;background:var(--bg);}
+.s3-howit-inner{max-width:1100px;margin:0 auto;}
+.s3-howit-h{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;color:var(--text);margin-bottom:52px;line-height:1.15;}
+.s3-blocks{display:grid;grid-template-columns:repeat(3,1fr);border-top:3px solid var(--rust);}
+.s3-block{padding:48px 40px 48px 0;border-right:1px solid var(--border);}
+.s3-block:last-child{border-right:none;padding-right:0;}
+.s3-block:not(:first-child){padding-left:40px;}
+.s3-bnum{font-family:'Playfair Display',serif;font-size:72px;font-weight:700;color:var(--rust);line-height:1;margin-bottom:16px;display:block;}
+.s3-bt{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:12px;}
+.s3-bd{font-size:15px;color:var(--muted);line-height:1.75;}
+
+/* C3 Who It's For — dark cinematic */
+.s3-who{background:var(--dark);padding:100px 80px;position:relative;overflow:hidden;}
+.s3-who::before{content:'WHO';position:absolute;right:-20px;top:50%;transform:translateY(-50%);font-family:'Playfair Display',serif;font-size:260px;font-weight:700;color:rgba(255,255,255,.025);line-height:1;pointer-events:none;user-select:none;}
+.s3-who-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1;}
+.s3-who-top{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:56px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.08);}
+.s3-who-tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:var(--rust);margin-bottom:20px;display:block;}
+.s3-who-hl{font-family:'Playfair Display',serif;font-size:clamp(26px,3.2vw,46px);font-weight:700;color:#f0ece4;line-height:1.15;margin:0;}
+.s3-who-note{font-size:16px;color:rgba(240,236,228,.45);line-height:1.75;align-self:end;}
+.s3-who-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 60px;}
+.s3-who-item{display:flex;align-items:center;gap:14px;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:15px;color:rgba(240,236,228,.75);}
+.s3-who-item:last-child{border-bottom:none;}
+.s3-who-chk{width:22px;height:22px;border-radius:50%;background:rgba(184,73,26,.18);border:1px solid rgba(184,73,26,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--rust);font-size:11px;font-weight:700;}
+
+/* C3 About — text left, photo right (dark bg) */
+.s3-about{display:grid;grid-template-columns:1fr 1fr;min-height:640px;overflow:hidden;}
+.s3-atext{background:var(--bg2);padding:100px 80px;display:flex;flex-direction:column;justify-content:center;}
+.s3-atext .s3-tag{margin-bottom:16px;}
+.s3-atext-hl{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,50px);font-weight:700;color:var(--text);margin-bottom:24px;line-height:1.15;}
+.s3-atext-body{color:var(--muted);font-size:17px;line-height:1.82;margin-bottom:16px;}
+.s3-atext-body strong{color:var(--text);}
+.s3-aphoto{background-image:url('https://www.philtheconnector.com/images/245fce6f0a6fbfae6355af9d7eac1783c4381029.jpg');background-size:cover;background-position:center top;}
+
+/* C3 Math — white bg, left-aligned large numbers */
+.s3-math{padding:100px 80px;background:var(--bg);}
+.s3-math-inner{max-width:1100px;margin:0 auto;}
+.s3-math-hl{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,56px);font-weight:700;font-style:italic;color:var(--text);line-height:1.1;margin-bottom:60px;}
+.s3-math-hl span{color:var(--rust);}
+.s3-stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border);}
+.s3-stat{padding:40px 40px 40px 0;border-right:1px solid var(--border);}
+.s3-stat:last-child{border-right:none;padding-right:0;}
+.s3-stat:not(:first-child){padding-left:40px;}
+.s3-snum{font-family:'Playfair Display',serif;font-size:clamp(52px,8vw,96px);font-weight:700;color:var(--rust);line-height:1;display:block;margin-bottom:4px;}
+.s3-slbl{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
+.s3-math-body{max-width:680px;margin-top:44px;color:var(--muted);font-size:17px;line-height:1.85;}
+.s3-math-body strong{color:var(--text);}
+
+/* C3 Final CTA — dark, giant italic type */
+.s3-final{background:var(--dark);padding:140px 80px;text-align:center;position:relative;overflow:hidden;}
+.s3-final::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,rgba(184,73,26,.16) 0%,transparent 60%);}
+.s3-final>*{position:relative;z-index:1;}
+.s3-final-big{font-family:'Playfair Display',serif;font-size:clamp(48px,8vw,100px);font-weight:700;font-style:italic;color:#f0ece4;line-height:1;margin-bottom:16px;}
+.s3-final-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(18px,2vw,26px);color:var(--rust-l);margin-bottom:48px;}
+.s3-final-micro{color:rgba(240,236,228,.22);font-size:13px;margin-top:24px;}
+
+/* FAQ section backgrounds per variant */
+.s1-faq{padding:88px 60px;background:var(--bg);}
+.s2-faq{padding:88px 60px;background:var(--bg);}
+.s3-faq{padding:88px 60px;background:var(--bg2);}
+.faq-in{max-width:760px;margin:0 auto;}
+.faq-h{font-family:'Playfair Display',serif;font-size:clamp(26px,3vw,40px);font-weight:700;color:var(--text);margin-bottom:32px;}
+
+/* ── MOBILE RESPONSIVE ── */
+@media(max-width:768px){
+
+  /* Preview bar — shrink tabs */
+  #preview-bar{gap:4px;padding:0 10px;}
+  .tab-btn{padding:4px 9px;font-size:11px;}
+  .pv-lbl{display:none;}
+
+  /* Shared nav */
+  .c-nav{padding:12px 20px;}
+  .c-logo-img{height:40px;}
+
+  /* Shared hero → stack */
+  .c-hero{grid-template-columns:1fr;min-height:auto;}
+  .c-hero-left{padding:72px 28px 60px;}
+  .c-hero-right{min-height:280px;clip-path:none;}
+  .c-cta-row{flex-direction:column;align-items:flex-start;gap:12px;}
+  .c-btn-primary,.c-btn-secondary{width:100%;text-align:center;}
+
+  /* Shared section tag */
+  .c-h2{font-size:clamp(22px,5.5vw,32px);}
+  .s3-tag{font-size:9px;letter-spacing:.2em;}
+  .s3-h2{font-size:clamp(22px,5.5vw,32px);}
+  .s3-sec{padding:44px 24px;}
+  .s3-sec-beige{padding:44px 24px;}
+
+  /* ── C1 MOBILE ── */
+  .s1{padding:64px 24px;}
+  .s1-contrast{grid-template-columns:1fr;}
+  .s1-steps{grid-template-columns:1fr;max-width:100%;}
+  .s1-qblock{padding:40px 24px;}
+  .s1-qm{font-size:100px;}
+  .s1-cta-row{flex-direction:column;align-items:center;gap:12px;}
+  .s1-btn-w,.s1-btn-o{width:100%;max-width:320px;text-align:center;}
+
+  /* ── C2 MOBILE ── */
+  .s2-philword{grid-template-columns:1fr;}
+  .s2-philword-img{height:280px;}
+  .s2-gap{grid-template-columns:1fr;}
+  .s2-gap-l,.s2-gap-r{padding:56px 28px;}
+  .s2-whatis{grid-template-columns:1fr;}
+  .s2-not,.s2-is{padding:56px 28px;}
+  .s2-get-grid{grid-template-columns:1fr;}
+  .s2-card{padding:32px 24px;}
+  .s2-timeline{flex-direction:column;gap:0;}
+  .s2-tstep{flex:none;width:100%;border-right:none;border-bottom:1px solid var(--border);padding:28px 24px;}
+  .s2-about{grid-template-columns:1fr;}
+  .s2-about-img{height:320px;order:-1;}
+  .s2-atext{padding:56px 28px;}
+  .s2-stats{grid-template-columns:1fr;}
+  .s2-wpills{justify-content:flex-start;}
+  .s2-sec,.s2-sec-beige,.s2-who,.s2-math{padding:64px 28px;}
+  .s2-final{padding:80px 28px;}
+  .s2-cta-row{flex-direction:column;align-items:center;gap:12px;}
+
+  /* ── C3 MOBILE ── */
+
+  /* Hide hero image on mobile */
+  .c-hero-right{display:none;}
+
+  /* Phil's Word — hide photo, tighten content */
+  .s3-philword{grid-template-columns:1fr;}
+  .s3-pw-photo{display:none;}
+  .s3-pw-content{padding:44px 24px;}
+  .s3-bigqm{font-size:56px;margin-bottom:0;line-height:1;}
+  .s3-qlead{font-size:clamp(18px,4.5vw,24px);margin-bottom:24px;line-height:1.3;}
+  .s3-qcols{grid-template-columns:1fr 1fr;gap:16px;}
+  .s3-qcols p{font-size:13px;line-height:1.6;margin-bottom:8px;}
+  .s3-qclose{font-size:14px;}
+
+  /* Gap — stack, trim padding */
+  .s3-gap{grid-template-columns:1fr;}
+  .s3-gap-l{padding:40px 24px 32px;}
+  .s3-gap-l::before{display:none;}
+  .s3-gap-hl{font-size:clamp(22px,5.5vw,32px);line-height:1.2;}
+  .s3-gap-r{padding:32px 24px 40px;}
+  .s3-gap-callout{margin-top:20px;padding:16px 18px;}
+
+  /* What It Is — stack columns */
+  .s3-whatis{padding:44px 24px;}
+  .s3-wi-hl{margin-bottom:40px;}
+  .s3-wi-cols{grid-template-columns:1fr;}
+  .s3-wi-not{padding:0 0 32px 0;border-right:none;border-bottom:1px solid var(--border);}
+  .s3-wi-yes{padding:32px 0 0 0;}
+  .s3-wi-row{padding:11px 0;}
+
+  /* What You Get — 2-col grid stays, tighter */
+  .s3-get{padding:44px 24px;}
+  .s3-get-grid{grid-template-columns:1fr 1fr;}
+  .s3-tile{padding:24px 16px;}
+  .s3-tile-n{font-size:36px;margin-bottom:10px;}
+
+  /* How It Works — 2-col on mobile, compact */
+  .s3-blocks{grid-template-columns:1fr 1fr;border-top:none;gap:1px;background:var(--border);}
+  .s3-block{border-right:none;border-top:3px solid var(--rust);padding:20px 16px;background:var(--bg);}
+  .s3-block:last-child{grid-column:1/-1;}
+  .s3-bnum{font-size:40px;margin-bottom:8px;}
+  .s3-bt{font-size:16px;margin-bottom:8px;}
+  .s3-bd{font-size:13px;line-height:1.6;}
+
+  /* Who It's For — stack top, keep 2-col list */
+  .s3-who{padding:44px 24px;}
+  .s3-who-top{grid-template-columns:1fr;gap:12px;margin-bottom:32px;padding-bottom:24px;}
+  .s3-who-note{font-size:14px;}
+  .s3-who-cols{grid-template-columns:1fr 1fr;gap:0 20px;}
+  .s3-who-item{font-size:13px;padding:11px 0;}
+  .s3-who::before{display:none;}
+
+  /* About Phil — hide photo on mobile, trim */
+  .s3-about{grid-template-columns:1fr;}
+  .s3-about-photo{display:none;}
+  .s3-atext{padding:44px 24px;}
+
+  /* Stats — horizontal row stays, tighter */
+  .s3-stats{padding:44px 24px;}
+  .s3-stat{padding:20px 12px;}
+
+  /* Final CTA */
+  .s3-final{padding:64px 24px;}
+  .s3-final-big{font-size:clamp(36px,9vw,56px);}
+  .s3-final-row{flex-direction:column;align-items:center;gap:12px;}
+
+  /* FAQ */
+  .s1-faq,.s2-faq,.s3-faq{padding:44px 24px;}
+}
+
+@media(max-width:480px){
+  .c-hero-left{padding:60px 20px 48px;}
+  .s3-wi-hl{font-size:clamp(24px,6vw,36px);}
+  .s3-gap-hl{font-size:clamp(22px,5.5vw,30px);}
+  .s3-who-hl{font-size:clamp(22px,6vw,32px);}
+  .s3-gap-r{padding-top:24px;padding-bottom:32px;}
+  .s3-gap-acc{margin-bottom:20px;}
+}
+</style>
+</head>
+<body>
+
+<div id="preview-bar">
+  <span class="pv-lbl">Design C</span>
+  <button class="tab-btn active" data-design="c1">C1 &nbsp;<span style="opacity:.5;font-size:10px;">Warm Stack</span></button>
+  <button class="tab-btn" data-design="c2">C2 &nbsp;<span style="opacity:.5;font-size:10px;">Split</span></button>
+  <button class="tab-btn" data-design="c3">C3 &nbsp;<span style="opacity:.5;font-size:10px;">Cinematic</span></button>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  C1 — WARM STACK                           -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="design-c1" class="design-page active dc1">
+  <nav class="c-nav">
+    <div><img src="https://www.philtheconnector.com/images/Connector-with-text-and-transparent-BG_3.png" alt="The Connector Community" class="c-logo-img"></div>
+    <a href="https://app.nolodex.com/request-invite?community=62586ba2-0a0d-4ca5-a983-dc0cfab13e44&group=7804e36a-5b33-417e-9dc5-74ae59221973" class="c-nav-cta">Request Your Invite</a>
+  </nav>
+  <section class="c-hero">
+    <div class="c-hero-left">
+      <p class="c-eyebrow">Phil Herrington &amp; Brian Hong, in partnership</p>
+      <h1 class="c-h1">You're One Connection Away From Your Next Best Client.</h1>
+      <div class="c-rule"></div>
+      <p class="c-subhead" style="max-width:480px;">Stop chasing cold leads. Every week, The Connector Community puts two warm, hand-picked introductions in front of you.</p>
+      <div class="c-cta-row">
+        <a href="https://app.nolodex.com/request-invite?community=62586ba2-0a0d-4ca5-a983-dc0cfab13e44&group=7804e36a-5b33-417e-9dc5-74ae59221973" class="c-btn-primary">Request Your Invite</a>
+        <a href="https://link.theconnectorcommunity.com/widget/bookings/phil-the-connector-brian-hong" class="c-btn-secondary">Book a Call</a>
+      </div>
+      <p class="c-micro">Two introductions a week. 104 a year. Worldwide.</p>
+    </div>
+    <div class="c-hero-right"></div>
+  </section>
+
+  <!-- Phil's Word -->
+  <section class="s1-dark" style="padding:88px 60px;">
+    <div class="s1-in">
+      <span class="s1-tag-d">A Straight Word From Phil</span>
+      <div class="s1-qblock">
+        <span class="s1-qm">"</span>
+        <p class="s1-qlead">Can I ask you something? Now that you've grown, isn't it kind of backwards?</p>
+        <div class="s1-qbody">
+          <p>You've actually got less time to find the relationships that grow your business. That's the trap. The bigger you get, the more your next deal is just one connection away, and the less time you have to go chase it.</p>
+          <p>So here's what I built, and I'm gonna be straight with you. <strong>I'm not a networking group. I think the weekly meeting is dead.</strong> What I built is a team of business matchmakers — two hand-picked introductions, every single week, no meeting to show up to.</p>
+          <span class="s1-qclose"><strong>The real question is this: do you want us out there finding your next partner, while you stay focused on running the thing?</strong></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gap -->
+  <section class="s1">
+    <div class="s1-in">
+      <span class="s1-tag">The Referral Revenue Gap</span>
+      <div class="s1-rule"></div>
+      <h2 class="s1-gap-hl">The best business you've ever closed didn't come from a cold email.<br><span>It came from a warm introduction.</span></h2>
+      <p class="s1-body">So why is your week still built on outreach that gets ignored? That's the Referral Revenue Gap — the distance between the business you're winning now and the business one introduction away.</p>
+      <p class="s1-body"><strong>You can't say the right thing to the wrong person. You don't have a pitch problem. You have a right-person problem. We fix that.</strong></p>
+    </div>
+  </section>
+
+  <!-- What It Is -->
+  <section class="s1-beige" style="padding:88px 60px;">
+    <div class="s1-in" style="max-width:900px;text-align:left;">
+      <span class="s1-tag">What It Is and What It Isn't</span>
+      <h2 class="s1-h2">Let's be clear.</h2>
+      <div class="s1-contrast">
+        <div class="s1-not-card">
+          <span class="s1-clabel">Not This</span>
+          <p class="s1-chead">No weekly meetings. No rooms to work. No directory to dig through.</p>
+          <div class="s1-cpoint"><span class="s1-cico">✕</span><span>No weekly Zoom to attend</span></div>
+          <div class="s1-cpoint"><span class="s1-cico">✕</span><span>No pitch parties or rooms to work</span></div>
+          <div class="s1-cpoint"><span class="s1-cico">✕</span><span>No algorithm deciding who you meet</span></div>
+          <div class="s1-cpoint"><span class="s1-cico">✕</span><span>No directory to dig through yourself</span></div>
+        </div>
+        <div class="s1-is-card">
+          <span class="s1-clabel">This</span>
+          <p class="s1-chead">A team of matchmakers working for you every single week.</p>
+          <div class="s1-cpoint"><span class="s1-cico">✓</span><span>Two hand-picked intros land in your inbox weekly</span></div>
+          <div class="s1-cpoint"><span class="s1-cico">✓</span><span>Every match made by judgment, not an algorithm</span></div>
+          <div class="s1-cpoint"><span class="s1-cico">✓</span><span>Worldwide — wherever you do business</span></div>
+          <div class="s1-cpoint"><span class="s1-cico">✓</span><span>Built on transfer of trust, not cold outreach</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What You Get -->
+  <section class="s1">
+    <div class="s1-in">
+      <span class="s1-tag">What You Get As A Member</span>
+      <h2 class="s1-h2">Everything teed up. Nothing left to chase.</h2>
+      <div class="s1-get">
+        <div class="s1-gi"><div class="s1-gnum">01</div><div class="s1-gtext"><h4>Two Hand-Picked Introductions Every Week</h4><p>Eight a month, 104 a year. Every one warm and hand-selected. We tell you who to meet, why, and how you might do business together.</p></div></div>
+        <div class="s1-gi"><div class="s1-gnum">02</div><div class="s1-gtext"><h4>Twice-Monthly Connector Mastermind</h4><p>Where members turn introductions into real relationships and referrals that compound over time.</p></div></div>
+        <div class="s1-gi"><div class="s1-gnum">03</div><div class="s1-gtext"><h4>The One-to-One Framework</h4><p>Phil's proven structure from 40 years and 5,000+ one-to-ones. Turns a first conversation into a warm, ongoing relationship.</p></div></div>
+        <div class="s1-gi"><div class="s1-gnum">04</div><div class="s1-gtext"><h4>Everything Organized in Nolodex</h4><p>Matches, introductions, and members in one place. Nothing falls through the cracks.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="s1-dark" style="padding:88px 60px;">
+    <div class="s1-in">
+      <span class="s1-tag-d">How It Works</span>
+      <h2 class="s1-h2-d">Three principles. One reliable outcome.</h2>
+      <div class="s1-steps">
+        <div class="s1-step"><div class="s1-sn">01</div><div class="s1-st">Transfer of Trust</div><p class="s1-sd">When a trusted person introduces you, their credibility transfers. You walk in already ahead.</p></div>
+        <div class="s1-step"><div class="s1-sn">02</div><div class="s1-st">Right People, Not a Ton of People</div><p class="s1-sd">Two well-chosen introductions beat a room of 200 every time. We filter so you don't have to.</p></div>
+        <div class="s1-step"><div class="s1-sn">03</div><div class="s1-st">Stay in Front of Them, It Compounds</div><p class="s1-sd">Members who work the framework see their referral network grow in ways cold outreach never could.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who It's For -->
+  <section class="s1">
+    <div class="s1-in">
+      <span class="s1-tag">Who This Is For</span>
+      <h2 class="s1-h2">If you can do business from a computer, you qualify.</h2>
+      <div class="s1-pills">
+        <span class="s1-pill">B2B Business Owners</span><span class="s1-pill">Founders &amp; CEOs</span><span class="s1-pill">Fractional CFO / COO / CMO</span><span class="s1-pill">Coaches &amp; Consultants</span><span class="s1-pill">Agency Owners</span><span class="s1-pill">Accountants &amp; CPAs</span><span class="s1-pill">Insurance Professionals</span><span class="s1-pill">Marketing &amp; Digital</span><span class="s1-pill">AI Consultants</span><span class="s1-pill">Attorneys &amp; Legal</span><span class="s1-pill">Web &amp; Development</span><span class="s1-pill">$500K–$5M Stage</span>
+      </div>
+      <span class="s1-pill-note">Best suited for service businesses at the $500K–$5M stage who grow through relationships, not volume.</span>
+    </div>
+  </section>
+
+  <!-- About Phil -->
+  <section class="s1-beige" style="padding:88px 60px;">
+    <div class="s1-in">
+      <span class="s1-tag">About Phil &amp; His Team</span>
+      <img src="https://www.philtheconnector.com/images/245fce6f0a6fbfae6355af9d7eac1783c4381029.jpg" alt="Phil The Connector" class="s1-photo">
+      <h2 class="s1-h2">I'm Phil The Connector.</h2>
+      <p class="s1-body">Back in 2018 I landed in a brand-new city where I knew exactly nobody, and had to build a network from absolute scratch. Forty years in sales had taught me one thing: warm introductions. Everything else is noise.</p>
+      <p class="s1-body">I've done over 5,000 one-to-ones since. I built The Connector Community to hand business owners the network I wish I'd had.</p>
+      <p class="s1-body">Today I don't do it alone. My team of business connectors does this all day, every day, so our members never have to.</p>
+      <div style="margin-top:28px;"><a href="https://link.theconnectorcommunity.com/widget/bookings/phil-the-connector-brian-hong" class="c-btn-secondary">Book a Call With Phil</a></div>
+    </div>
+  </section>
+
+  <!-- Math -->
+  <section class="s1-dark" style="padding:88px 60px;">
+    <div class="s1-in">
+      <span class="s1-tag-d">The Math</span>
+      <span class="s1-bignum">104</span>
+      <span class="s1-biglabel">hand-picked introductions a year.</span>
+      <p class="s1-body-d">If just one of those connections — just one all year — turns into a client or partner, what's that worth to you? For most members, that's a six-figure answer.</p>
+      <p class="s1-body-d"><strong>The real question was never the price. It's whether you'd rather have Phil's team out there finding your next partner every week, or keep trying to carve out the time yourself.</strong></p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="s1-faq">
+    <div class="faq-in">
+      <span class="s1-tag">Frequently Asked Questions</span>
+      <h2 class="faq-h">Common questions, honest answers.</h2>
+      <div class="faq-item open"><div class="faq-q">Is this a local networking group?</div><div class="faq-a"><div class="faq-a-inner">No. The Connector Community is worldwide. As long as you can do business from a computer, your location doesn't matter.</div></div></div>
+      <div class="faq-item"><div class="faq-q">What does membership cost?</div><div class="faq-a"><div class="faq-a-inner">We'll walk you through the details when you request your invite. This page leads with the value, not the price, because that's the right order.</div></div></div>
+      <div class="faq-item"><div class="faq-q">How are my introductions chosen?</div><div class="faq-a"><div class="faq-a-inner">By hand. We look at who you serve and who you want to meet, then match you with members whose paths should genuinely cross yours. Judgment, not an algorithm.</div></div></div>
+      <div class="faq-item"><div class="faq-q">I'm not a natural networker. Will this work for me?</div><div class="faq-a"><div class="faq-a-inner">Yes. That's exactly who the One-to-One Framework is for. You need a repeatable structure, not a talent for working a room.</div></div></div>
+      <div class="faq-item"><div class="faq-q">How much time does it take?</div><div class="faq-a"><div class="faq-a-inner">As much or as little as you want. The introductions arrive either way. Members who work the framework get the compounding results.</div></div></div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="s1-rust" style="padding:100px 60px;text-align:center;">
+    <h2 class="s1-cta-h">You're one connection away.</h2>
+    <div class="s1-cta-rule"></div>
+    <p class="s1-cta-body">Request your invite, and let's start putting the right people in front of you, every single week.</p>
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;">
+      <a href="https://app.nolodex.com/request-invite?community=62586ba2-0a0d-4ca5-a983-dc0cfab13e44&group=7804e36a-5b33-417e-9dc5-74ae59221973" class="s1-btn-w">Request My Invite</a>
+      <a href="https://link.theconnectorcommunity.com/widget/bookings/phil-the-connector-brian-hong" class="s1-btn-o">Book a Call First</a>
+    </div>
+    <p class="s1-cta-micro">Worldwide. Warm introductions only. No cold pitches, ever.</p>
+  </section>
+  <footer class="c-footer">&copy; 2025 The Connector Community &nbsp;|&nbsp; Phil Herrington &amp; Brian Hong &nbsp;|&nbsp; Worldwide</footer>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  C2 — SPLIT / ASYMMETRIC                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="design-c2" class="design-page dc2">
+  <nav class="c-nav">
+    <div><img src="https://www.philtheconnector.com/images/Connector-with-text-and-transparent-BG_3.png" alt="The Connector Community" class="c-logo-img"></div>
+    <a href="https://app.nolodex.com/request-invite?community=62586ba2-0a0d-4ca5-a983-dc0cfab13e44&group=7804e36a-5b33-417e-9dc5-74ae59221973" class="c-nav-cta">Request Your Invite</a>
+  </nav>
+  <section class="c-hero">
+    <div class="c-hero-left">
+      <p class="c-eyebrow">Phil Herrington &amp; Brian Hong, in partnership</p>
+      <h1 class="c-h1">You're One Connection Away From Your Next Best Client.</h1>
+      <div class="c-rule"></div>
+      <p class="c-subhead" style="max-width:480px;">Stop chasing cold leads. Every week, The Connector Community puts two warm, hand-picked introductions in front of you.</p>
+      <div class="c-cta-row">
+        <a href="https://app.nolodex.com/request-invite?community=62586ba2-0a0d-4ca5-a983-dc0cfab13e44&group=7804e36a-5b33-417e-9dc5-74ae59221973" class="c-btn-primary">Request Your Invite</a>
+        <a href="https://link.theconnectorcommunity.com/widget/bookings/phil-the-connector-brian-hong" class="c-btn-secondary">Book a Call</a>
+      </div>
+      <p class="c-micro">Two introductions a week. 104 a year. Worldwide.</p>
+    </div>
+    <div class="c-hero-right"></div>
+  </section>
+
+  <!-- Phil's Word -->
+  <section class="s2-philword">
+    <div class="s2-pw-photo"></div>
+    <div class="s2-pw-content">
+      <span class="s2-qm">"</span>
+      <p class="s2-qlead">Can I ask you something? Now that you've grown, isn't it kind of backwards?</p>
+      <div class="s2-qbody">
+        <p>You've actually got less time to find the relationships that grow your business. The bigger you get, the more your next deal is just one connection away, and the less time you have to chase it.</p>
+        <p>So here's what I built, and I'm gonna be straight with you. <strong>I'm not a networking group. I think the weekly meeting is dead.</strong> What I built is a team of business matchmakers. Two hand-picked introductions in your inbox, every week. No meeting to show up to.</p>
+        <span class="s2-qclose"><strong>The real question: do you want us out there finding your next partner, while you stay focused on running the thing?</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gap -->
+  <section class="s2-gap">
+    <div class="s2-gap-l">
+      <div class="s2-gap-acc"></div>
+      <h2 class="s2-gap-hl">The best business you've ever closed didn't come from a cold email.<br><span>It came from a warm introduction.</span></h2>
+    </div>
+    <div class="s2-gap-r">
+      <span class="s2-tag">The Referral Revenue Gap</span>
+      <p>So why is your week still built on outreach that gets ignored? That's the Referral Revenue Gap — the distance between what you're winning now and what's sitting one introduction away.</p>
+      <p><strong>You can't say the right thing to the wrong person. You don't have a pitch problem. You have a right-person problem. We fix that.</strong></p>
+    </div>
+  </section>
+
+  <!-- What It Is -->
+  <section class="s2-whatis">
+    <div class="s2-not">
+      <span class="s2-plabel">What It's Not</span>
+      <h3 class="s2-phead">Not another networking group with a weekly meeting.</h3>
+      <div class="s2-pt"><span class="s2-ico">✕</span><span>No weekly Zoom you're expected to attend</span></div>
+      <div class="s2-pt"><span class="s2-ico">✕</span><span>No room to work or pitch parties</span></div>
+      <div class="s2-pt"><span class="s2-ico">✕</span><span>No directory to dig through yourself</span></div>
+      <div class="s2-pt"><span class="s2-ico">✕</span><span>No algorithm deciding who you know</span></div>
+      <div class="s2-pt"><span class="s2-ico">✕</span><span>No calendar to manage, no city to be tied to</span></div>
+    </div>
+    <div class="s2-is">
+      <span class="s2-plabel">What It Is</span>
+      <h3 class="s2-phead">A team of business matchmakers working for you every week.</h3>
+      <div class="s2-pt"><span class="s2-ico">✓</span><span>Two hand-picked intros in your inbox every week</span></div>
+      <div class="s2-pt"><span class="s2-ico">✓</span><span>Every match made by judgment, not an algorithm</span></div>
+      <div class="s2-pt"><span class="s2-ico">✓</span><span>Worldwide — wherever you do business</span></div>
+      <div class="s2-pt"><span class="s2-ico">✓</span><span>Built on transfer of trust, not cold outreach</span></div>
+      <div class="s2-pt"><span class="s2-ico">✓</span><span>Everything organized in Nolodex</span></div>
+    </div>
+  </section>
+
+  <!-- What You Get -->
+  <section class="s2-sec">
+    <div class="s2-in-m">
+      <span class="s2-tag">What You Get</span>
+      <h2 class="s2-h2">Everything teed up. Nothing left to chase.</h2>
+      <div class="s2-get-grid">
+        <div class="s2-card"><div class="s2-cn">01</div><h4>Two Hand-Picked Introductions Every Week</h4><p>Eight a month, 104 a year. Every one warm and hand-selected. We tell you who to meet, why, and how.</p></div>
+        <div class="s2-card"><div class="s2-cn">02</div><h4>Twice-Monthly Connector Mastermind</h4><p>Where members turn introductions into real relationships and referrals that compound over time.</p></div>
+        <div class="s2-card"><div class="s2-cn">03</div><h4>The One-to-One Framework</h4><p>Phil's proven structure from 40 years and 5,000+ one-to-ones. A repeatable system for turning conversations into relationships.</p></div>
+        <div class="s2-card"><div class="s2-cn">04</div><h4>Everything Organized in Nolodex</h4><p>Matches, introductions, and members in one place. Nothing falls through the cracks.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="s2-sec-beige" style="padding:88px 60px;">
+    <div class="s2-in" style="text-align:center;">
+      <span class="s2-tag">How It Works</span>
+      <h2 class="s2-h2" style="max-width:560px;margin:0 auto;">Three principles. One reliable outcome.</h2>
+      <div class="s2-timeline">
+        <div class="s2-tstep"><div class="s2-tnum">01</div><div class="s2-tt">Transfer of Trust</div><p class="s2-td">Their credibility transfers with the introduction. You walk in already ahead.</p></div>
+        <div class="s2-tstep"><div class="s2-tnum">02</div><div class="s2-tt">Right People, Not a Ton of People</div><p class="s2-td">Two well-chosen introductions beat a room of 200. We filter so you don't have to.</p></div>
+        <div class="s2-tstep"><div class="s2-tnum">03</div><div class="s2-tt">It Compounds Over Time</div><p class="s2-td">Members who work the framework see their referral network grow in ways cold outreach never could.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who It's For -->
+  <section class="s2-who">
+    <div class="s2-in" style="max-width:880px;margin:0 auto;text-align:center;">
+      <span class="s2-tag" style="color:var(--rust);">Who This Is For</span>
+      <h2 class="s2-h2" style="color:#f0ece4;margin-bottom:44px;">If you can do business from a computer, you qualify.</h2>
+      <div class="s2-wpills">
+        <span class="s2-wpill">B2B Business Owners</span><span class="s2-wpill">Founders &amp; CEOs</span><span class="s2-wpill">Fractional CFO / COO / CMO</span><span class="s2-wpill">Coaches &amp; Consultants</span><span class="s2-wpill">Agency Owners</span><span class="s2-wpill">Accountants &amp; CPAs</span><span class="s2-wpill">Insurance Professionals</span><span class="s2-wpill">Marketing &amp; Digital</span><span class="s2-wpill">AI Consultants</span><span class="s2-wpill">Attorneys &amp; Legal</span><span class="s2-wpill">$500K–$5M Stage</span>
+      </div>
+      <p class="s2-wnote">Best suited for service businesses at the $500K–$5M stage who grow through relationships, not volume.</p>
+    </div>
+  </section>
+
+  <!-- About Phil -->
+  <section class="s2-about">
+    <div class="s2-aphoto"></div>
+    <div class="s2-atext">
+      <span class="s2-tag">About Phil &amp; His Team</span>
+      <h2 class="s2-h2">I'm Phil The Connector.</h2>
+      <p class="s2-body">Back in 2018 I landed in a brand-new city where I knew exactly nobody, and built a network from scratch. Forty years in sales had taught me one thing: warm introductions. Everything else is noise.</p>
+      <p class="s2-body">I've done over 5,000 one-to-ones since. I built The Connector Community to hand business owners the network I wish I'd had.</p>
+      <p class="s2-body">Today my team of business connectors does this all day, every day, so our members never have to.</p>
+      <div style="margin-top:32px;"><a href="https://link.theconnectorcommunity.com/widget/bookings/phil-the-connector-brian-hong" class="c-btn-secondary">Book a Call With Phil</a></div>
+    </div>
+  </section>
+
+  <!-- Math -->
+  <section class="s2-math">
+    <div class="s2-in" style="max-width:880px;margin:0 auto;">
+      <span class="s2-tag" style="color:var(--rust);">The Math</span>
+      <h2 class="s2-math-hl">Run it the way a business owner would.</h2>
+      <div class="s2-stats">
+        <div class="s2-stat"><span class="s2-sbig">104</span><span class="s2-slbl">Warm intros per year</span></div>
+        <div class="s2-stat"><span class="s2-sbig">5,000+</span><span class="s2-slbl">One-to-ones by Phil</span></div>
+        <div class="s2-stat"><span class="s2-sbig">0</span><span class="s2-slbl">Weekly meetings required</span></div>
+      </div>
+      <p class="s2-mbody">If just one of those 104 connections turns into a client or partner, what's that worth? For most members, that's a six-figure answer.</p>
+      <p class="s2-mbody"><strong>The real question was never the price. It's whether you'd rather have Phil's team finding your next partner every week, or keep trying to do it yourself.</strong></p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="s2-faq">
+    <div class="faq-in">
+      <span class="s2-tag">Frequently Asked Questions</span>
+      <h2 class="faq-h">Common questions, honest answers.</h2>
+      <div class="faq-item open"><div class="faq-q">Is this a local networking group?</div><div class="faq-a"><div class="faq-a-inner">No. Worldwide. As long as you can do business from a computer, your location doesn't matter.</div></div></div>
+      <div class="faq-item"><div class="faq-q">What does membership cost?</div><div class="faq-a"><div class="faq-a-inner">We'll walk you through the details when you request your invite. This page leads with the value, not the price — that's the right order.</div></div></div>
+      <div class="faq-item"><div class="faq-q">How are my introductions chosen?</div><div class="faq-a"><div class="faq-a-inner">By hand. We look at who you serve and who you want to meet, then match you with members whose paths should genuinely cross yours.</div></div></div>
+      <div class="faq-item"><div class="faq-q">I'm not a natural networker. Will this work for me?</div><div class="faq-a"><div class="faq-a-inner">Yes. That's exactly who the One-to-One Framework is for. You need a repeatable structure, not a talent for working a room.</div></div></div>
+      <div class="faq-item"><div class="faq-q">How much time does it take?</div><div class="faq-a"><div class="faq-a-inner">The introductions arrive either way. Members who work the framework get the compounding results.</div></div></div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="s2-final">
+    <span class="s2-tag" style="text-align:center;display:block;">The Next Step</span>
+    <h2 class="s2-cta-h">You're one connection away.</h2>
+    <div class="s2-cta-rule"></div>
+    <p class="s2-cta-body">Request your invite, and let's start putting the right people in front of you every single week.</p>
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;">
+      <a href="https://app.nolodex.com/request-invite?community=62586ba2-0a0d-4ca5-a983-dc0cfab13e44&group=7804e36a-5b33-417e-9dc5-74ae59221973" class="c-btn-primary" style="font-size:15px;padding:16px 40px;">Request My Invite</a>
+      <a href="https://link.theconnectorcommunity.com/widget/bookings/phil-the-connector-brian-hong" class="c-btn-secondary">Book a Call First</a>
+    </div>
+    <p class="s2-cta-micro">Worldwide. Warm introductions only. No cold pitches, ever.</p>
+  </section>
+  <footer class="c-footer">&copy; 2025 The Connector Community &nbsp;|&nbsp; Phil Herrington &amp; Brian Hong &nbsp;|&nbsp; Worldwide</footer>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  C3 — CINEMATIC                            -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="design-c3" class="design-page dc3">
+  <nav class="c-nav">
+    <div><img src="https://www.philtheconnector.com/images/Connector-with-text-and-transparent-BG_3.png" alt="The Connector Community" class="c-logo-img"></div>
+    <a href="https://app.nolodex.com/request-invite?community=62586ba2-0a0d-4ca5-a983-dc0cfab13e44&group=7804e36a-5b33-417e-9dc5-74ae59221973" class="c-nav-cta">Request Your Invite</a>
+  </nav>
+  <section class="c-hero">
+    <div class="c-hero-left">
+      <p class="c-eyebrow">Phil Herrington &amp; Brian Hong, in partnership</p>
+      <h1 class="c-h1">You're One Connection Away From Your Next Best Client.</h1>
+      <div class="c-rule"></div>
+      <p class="c-subhead" style="max-width:480px;">Stop chasing cold leads. Every week, The Connector Community puts two warm, hand-picked introductions in front of you.</p>
+      <div class="c-cta-row">
+        <a href="https://app.nolodex.com/request-invite?community=62586ba2-0a0d-4ca5-a983-dc0cfab13e44&group=7804e36a-5b33-417e-9dc5-74ae59221973" class="c-btn-primary">Request Your Invite</a>
+        <a href="https://link.theconnectorcommunity.com/widget/bookings/phil-the-connector-brian-hong" class="c-btn-secondary">Book a Call</a>
+      </div>
+      <p class="c-micro">Two introductions a week. 104 a year. Worldwide.</p>
+    </div>
+    <div class="c-hero-right"></div>
+  </section>
+
+  <!-- Phil's Word -->
+  <section class="s3-philword">
+    <div class="s3-pw-inner">
+      <span class="s3-bigqm">"</span>
+      <p class="s3-qlead">Can I ask you something? Now that you've grown, isn't it kind of backwards that you have less time for the relationships that actually move the needle?</p>
+      <div class="s3-qcols">
+        <div>
+          <p>That's the trap. The bigger you get, the more your next deal is just one connection away — and the less time you have to go chase it. Ten one-to-ones a week, drinking from a fire hose — that's a young man's game.</p>
+          <p>So here's what I built. <strong>I'm not a networking group. The weekly meeting is dead.</strong></p>
+        </div>
+        <div>
+          <p>What I built is a team of business matchmakers. Think executive search firm, but for partnerships. Two hand-picked introductions, every week, in your inbox. No meeting to show up to.</p>
+          <span class="s3-qclose"><strong>The real question: do you want us out there finding your next partner while you stay focused on running the thing?</strong></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gap -->
+  <section class="s3-gap">
+    <div class="s3-gap-l">
+      <h2 class="s3-gap-hl">The best business you've ever closed didn't come from a cold email.<br><br><span>It came from a warm introduction.</span></h2>
+    </div>
+    <div class="s3-gap-r">
+      <span class="s3-gap-tag">The Referral Revenue Gap</span>
+      <div class="s3-gap-acc"></div>
+      <div class="s3-gap-body">
+        <p>So why is your week still built on outreach that gets ignored? That's the Referral Revenue Gap — the distance between what you're winning now and the business sitting one introduction away.</p>
+        <p>You can't say the right thing to the wrong person.</p>
+      </div>
+      <div class="s3-gap-callout">
+        <p>You don't have a pitch problem. You have a right-person problem. We fix that.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What It Is -->
+  <section class="s3-whatis">
+    <div class="s3-whatis-inner">
+      <span class="s3-wi-tag">What It Actually Is</span>
+      <h2 class="s3-wi-hl">A matchmaking service,<br>not a networking group.</h2>
+      <div class="s3-wi-cols">
+        <div class="s3-wi-not">
+          <span class="s3-wi-col-label">Not This</span>
+          <h3 class="s3-wi-col-hl">No weekly meetings. No rooms to work. No directory.</h3>
+          <div class="s3-wi-row"><span class="s3-wi-mk">✕</span><span>No weekly Zoom to attend</span></div>
+          <div class="s3-wi-row"><span class="s3-wi-mk">✕</span><span>No pitch parties or rooms to work</span></div>
+          <div class="s3-wi-row"><span class="s3-wi-mk">✕</span><span>No algorithm deciding who you meet</span></div>
+          <div class="s3-wi-row"><span class="s3-wi-mk">✕</span><span>No city, no calendar, no commitment</span></div>
+        </div>
+        <div class="s3-wi-yes">
+          <span class="s3-wi-col-label">This</span>
+          <h3 class="s3-wi-col-hl">A team of matchmakers finding the right people for you, every week.</h3>
+          <div class="s3-wi-row"><span class="s3-wi-mk">✓</span><span>Two hand-picked intros in your inbox weekly</span></div>
+          <div class="s3-wi-row"><span class="s3-wi-mk">✓</span><span>Every match by judgment, not algorithm</span></div>
+          <div class="s3-wi-row"><span class="s3-wi-mk">✓</span><span>Worldwide — wherever you do business</span></div>
+          <div class="s3-wi-row"><span class="s3-wi-mk">✓</span><span>Built on transfer of trust</span></div>
+          <div class="s3-wi-row"><span class="s3-wi-mk">✓</span><span>Organized in Nolodex — nothing falls through</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What You Get -->
+  <section class="s3-get">
+    <div class="s3-get-inner">
+      <span class="s3-tag-d">What You Get As A Member</span>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,46px);font-weight:700;color:#f0ece4;margin-bottom:0;line-height:1.15;">Everything teed up. Nothing left to chase.</h2>
+      <div class="s3-get-grid">
+        <div class="s3-tile"><div class="s3-tile-n">01</div><div class="s3-tile-t">Two Hand-Picked Introductions Every Week</div><p class="s3-tile-d">Eight a month, 104 a year. Every one warm and hand-selected. We tell you who, why, and how.</p></div>
+        <div class="s3-tile"><div class="s3-tile-n">02</div><div class="s3-tile-t">Twice-Monthly Connector Mastermind</div><p class="s3-tile-d">Where introductions turn into real relationships and referrals that compound over time.</p></div>
+        <div class="s3-tile"><div class="s3-tile-n">03</div><div class="s3-tile-t">The One-to-One Framework</div><p class="s3-tile-d">Phil's proven system from 40 years and 5,000+ one-to-ones. Turns conversations into relationships.</p></div>
+        <div class="s3-tile"><div class="s3-tile-n">04</div><div class="s3-tile-t">Everything in Nolodex</div><p class="s3-tile-d">Matches, introductions, and members organized in one place. Nothing falls through.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="s3-howit">
+    <div class="s3-howit-inner">
+      <span class="s3-tag">How It Works</span>
+      <h2 class="s3-howit-h">Three principles. One reliable outcome.</h2>
+      <div class="s3-blocks">
+        <div class="s3-block"><span class="s3-bnum">01</span><div class="s3-bt">Transfer of Trust</div><p class="s3-bd">When a trusted person introduces you, their credibility transfers. You walk into every conversation already ahead. No convincing required.</p></div>
+        <div class="s3-block"><span class="s3-bnum">02</span><div class="s3-bt">The Right People, Not a Ton of People</div><p class="s3-bd">Two well-chosen introductions beat a room of 200 every time. We filter so members don't waste conversations.</p></div>
+        <div class="s3-block"><span class="s3-bnum">03</span><div class="s3-bt">Stay in Front of Them, It Compounds</div><p class="s3-bd">Introductions build month after month. Members who work the framework see referral networks grow in ways cold outreach never could.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who It's For -->
+  <section class="s3-who">
+    <div class="s3-who-inner">
+      <div class="s3-who-top">
+        <div>
+          <span class="s3-who-tag">Who This Is For</span>
+          <h2 class="s3-who-hl">If you can do business from a computer, you qualify.</h2>
+        </div>
+        <p class="s3-who-note">We work with B2B professionals at the $500K–$5M revenue stage who grow through relationships, not cold outreach.</p>
+      </div>
+      <div class="s3-who-cols">
+        <div>
+          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>B2B business owners, founders, CEOs</span></div>
+          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Fractional CFO / COO / CMO / CTO</span></div>
+          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Coaches, consultants, agency owners</span></div>
+          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Accountants, CPAs, insurance professionals</span></div>
+          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>$500K–$5M revenue stage</span></div>
+        </div>
+        <div>
+          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Marketing, digital, and web professionals</span></div>
+          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>AI consultants and tech services</span></div>
+          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Attorneys and legal professionals</span></div>
+          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Service businesses who grow through relationships</span></div>
+          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Anyone who can do business from anywhere</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Phil -->
+  <section class="s3-about">
+    <div class="s3-atext">
+      <span class="s3-tag">About Phil &amp; His Team</span>
+      <h2 class="s3-atext-hl">I'm Phil The Connector.</h2>
+      <p class="s3-atext-body">Back in 2018 I landed in a brand-new city where I knew exactly nobody, and built a network from scratch. Forty years in sales taught me one thing: <strong>warm introductions. Everything else is noise.</strong></p>
+      <p class="s3-atext-body">I've done over 5,000 one-to-ones since. I built The Connector Community to hand business owners the network I wish I'd had — without the decades of trial and dead-end coffee meetings.</p>
+      <p class="s3-atext-body">Today my team of business connectors does this all day, every day, so our members never have to.</p>
+      <div style="margin-top:32px;"><a href="https://link.theconnectorcommunity.com/widget/bookings/phil-the-connector-brian-hong" class="c-btn-secondary">Book a Call With Phil</a></div>
+    </div>
+    <div class="s3-aphoto"></div>
+  </section>
+
+  <!-- Math -->
+  <section class="s3-math">
+    <div class="s3-math-inner">
+      <span class="s3-tag">The Math</span>
+      <h2 class="s3-math-hl">Run it the way a business owner would.<br><span>If just one connection lands, what's it worth?</span></h2>
+      <div class="s3-stats">
+        <div class="s3-stat"><span class="s3-snum">104</span><span class="s3-slbl">Warm intros per year</span></div>
+        <div class="s3-stat"><span class="s3-snum">5,000+</span><span class="s3-slbl">One-to-ones by Phil</span></div>
+        <div class="s3-stat"><span class="s3-snum">0</span><span class="s3-slbl">Weekly meetings required</span></div>
+      </div>
+      <p class="s3-math-body">For most members, one single connection turning into a client is a six-figure answer. <strong>The real question was never the price. It's whether you'd rather have Phil's team out there finding your next partner every week, or keep trying to carve out the time yourself.</strong></p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="s3-faq">
+    <div class="faq-in">
+      <span class="s3-tag">Frequently Asked Questions</span>
+      <h2 class="faq-h">Common questions, honest answers.</h2>
+      <div class="faq-item open"><div class="faq-q">Is this a local networking group?</div><div class="faq-a"><div class="faq-a-inner">No. Worldwide. As long as you can do business from a computer, your location doesn't matter.</div></div></div>
+      <div class="faq-item"><div class="faq-q">What does membership cost?</div><div class="faq-a"><div class="faq-a-inner">We'll walk you through the details when you request your invite. This page leads with the value, not the price — that's the right order.</div></div></div>
+      <div class="faq-item"><div class="faq-q">How are my introductions chosen?</div><div class="faq-a"><div class="faq-a-inner">By hand. We look at who you serve and who you want to meet, then match you with members whose paths should genuinely cross yours.</div></div></div>
+      <div class="faq-item"><div class="faq-q">I'm not a natural networker. Will this work for me?</div><div class="faq-a"><div class="faq-a-inner">Yes. That's exactly who the One-to-One Framework is for. You need a repeatable structure, not a talent for working a room.</div></div></div>
+      <div class="faq-item"><div class="faq-q">How much time does it take?</div><div class="faq-a"><div class="faq-a-inner">The introductions arrive either way. Members who work the framework get the compounding results.</div></div></div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="s3-final">
+    <span class="s3-tag-d" style="text-align:center;display:block;">The Next Step</span>
+    <h2 class="s3-final-big">You're one<br>connection away.</h2>
+    <p class="s3-final-sub">Request your invite. Let's start putting the right people in front of you.</p>
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;">
+      <a href="https://app.nolodex.com/request-invite?community=62586ba2-0a0d-4ca5-a983-dc0cfab13e44&group=7804e36a-5b33-417e-9dc5-74ae59221973" class="c-btn-primary" style="font-size:15px;padding:16px 44px;">Request My Invite</a>
+      <a href="https://link.theconnectorcommunity.com/widget/bookings/phil-the-connector-brian-hong" class="c-btn-secondary" style="border-color:rgba(240,236,228,.25);color:rgba(240,236,228,.5)!important;">Book a Call First</a>
+    </div>
+    <p class="s3-final-micro">Worldwide. Warm introductions only. No cold pitches, ever.</p>
+  </section>
+  <footer class="c-footer">&copy; 2025 The Connector Community &nbsp;|&nbsp; Phil Herrington &amp; Brian Hong &nbsp;|&nbsp; Worldwide</footer>
+</div>
+
+<script>
+const tabBtns = document.querySelectorAll('.tab-btn');
+const designs = document.querySelectorAll('.design-page');
+
+function showDesign(id) {
+  designs.forEach(d => d.classList.remove('active'));
+  tabBtns.forEach(b => b.classList.remove('active'));
+  document.getElementById('design-' + id).classList.add('active');
+  document.querySelector('[data-design="' + id + '"]').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+tabBtns.forEach(btn => btn.addEventListener('click', () => showDesign(btn.dataset.design)));
+
+// FAQ accordion
+document.addEventListener('click', e => {
+  const q = e.target.closest('.faq-q');
+  if (!q) return;
+  const item = q.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  item.closest('section').querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+});
+</script>
+</body>
+</html>
