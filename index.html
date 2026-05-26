@@ -173,6 +173,74 @@ body{
 .faq-in{max-width:760px;margin:0 auto;}
 .faq-h{font-family:'Playfair Display',serif;font-size:clamp(26px,3vw,40px);font-weight:700;color:var(--text);margin-bottom:32px;}
 
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+/* Hero load-in sequence */
+@keyframes heroFadeUp{
+  from{opacity:0;transform:translateY(26px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes ruleExpand{
+  from{width:0}
+  to{width:60px}
+}
+
+.c-hero-left .c-eyebrow  {animation:heroFadeUp .55s ease .08s  both;}
+.c-hero-left .c-h1       {animation:heroFadeUp .65s ease .28s  both;}
+.c-hero-left .c-rule     {animation:ruleExpand .5s  ease .6s   both;}
+.c-hero-left .c-subhead  {animation:heroFadeUp .55s ease .75s  both;}
+.c-hero-left .c-cta-row  {animation:heroFadeUp .55s ease .95s  both;}
+.c-hero-left .c-micro    {animation:heroFadeUp .45s ease 1.15s both;}
+
+/* Scroll-reveal base states */
+.js-reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);
+}
+.js-reveal.revealed{opacity:1;transform:translateY(0);}
+
+.js-reveal-left{
+  opacity:0;
+  transform:translateX(-18px);
+  transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1);
+}
+.js-reveal-left.revealed{opacity:1;transform:translateX(0);}
+
+.js-reveal-scale{
+  opacity:0;
+  transform:scale(.96) translateY(20px);
+  transition:opacity .95s cubic-bezier(.22,1,.36,1),transform .95s cubic-bezier(.22,1,.36,1);
+}
+.js-reveal-scale.revealed{opacity:1;transform:scale(1) translateY(0);}
+
+/* Stagger delays */
+[data-delay="1"]{transition-delay:.08s;}
+[data-delay="2"]{transition-delay:.2s;}
+[data-delay="3"]{transition-delay:.34s;}
+[data-delay="4"]{transition-delay:.5s;}
+[data-delay="5"]{transition-delay:.12s;}
+[data-delay="6"]{transition-delay:.24s;}
+[data-delay="7"]{transition-delay:.38s;}
+[data-delay="8"]{transition-delay:.54s;}
+[data-delay="9"]{transition-delay:.7s;}
+
+/* Respect prefers-reduced-motion */
+@media(prefers-reduced-motion:reduce){
+  .c-hero-left .c-eyebrow,
+  .c-hero-left .c-h1,
+  .c-hero-left .c-rule,
+  .c-hero-left .c-subhead,
+  .c-hero-left .c-cta-row,
+  .c-hero-left .c-micro{animation:none;}
+  .c-hero-left .c-rule{width:60px;}
+  .js-reveal,.js-reveal-left,.js-reveal-scale{
+    opacity:1;transform:none;transition:none;
+  }
+}
+
 /* MOBILE */
 @media(max-width:768px){
   .c-nav{padding:12px 20px;}
@@ -319,31 +387,34 @@ body{
     </div>
   </section>
 
+  <!-- WHAT YOU GET — tiles animate in with stagger -->
   <section class="s3-get">
     <div class="s3-get-inner">
       <span class="s3-tag-d">What You Get As A Member</span>
       <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,46px);font-weight:700;color:#f0ece4;margin-bottom:0;line-height:1.15;">Everything teed up. Nothing left to chase.</h2>
       <div class="s3-get-grid">
-        <div class="s3-tile"><div class="s3-tile-n">01</div><div class="s3-tile-t">Two Hand-Picked Introductions Every Week</div><p class="s3-tile-d">Eight a month, 104 a year. Every one warm and hand-selected. We tell you who, why, and how.</p></div>
-        <div class="s3-tile"><div class="s3-tile-n">02</div><div class="s3-tile-t">Twice-Monthly Connector Mastermind</div><p class="s3-tile-d">Where introductions turn into real relationships and referrals that compound over time.</p></div>
-        <div class="s3-tile"><div class="s3-tile-n">03</div><div class="s3-tile-t">The One-to-One Framework</div><p class="s3-tile-d">Phil's proven system from 40 years and 5,000+ one-to-ones. Turns conversations into relationships.</p></div>
-        <div class="s3-tile"><div class="s3-tile-n">04</div><div class="s3-tile-t">Everything in Nolodex</div><p class="s3-tile-d">Matches, introductions, and members organized in one place. Nothing falls through.</p></div>
+        <div class="s3-tile js-reveal" data-delay="1"><div class="s3-tile-n">01</div><div class="s3-tile-t">Two Hand-Picked Introductions Every Week</div><p class="s3-tile-d">Eight a month, 104 a year. Every one warm and hand-selected. We tell you who, why, and how.</p></div>
+        <div class="s3-tile js-reveal" data-delay="2"><div class="s3-tile-n">02</div><div class="s3-tile-t">Twice-Monthly Connector Mastermind</div><p class="s3-tile-d">Where introductions turn into real relationships and referrals that compound over time.</p></div>
+        <div class="s3-tile js-reveal" data-delay="3"><div class="s3-tile-n">03</div><div class="s3-tile-t">The One-to-One Framework</div><p class="s3-tile-d">Phil's proven system from 40 years and 5,000+ one-to-ones. Turns conversations into relationships.</p></div>
+        <div class="s3-tile js-reveal" data-delay="4"><div class="s3-tile-n">04</div><div class="s3-tile-t">Everything in Nolodex</div><p class="s3-tile-d">Matches, introductions, and members organized in one place. Nothing falls through.</p></div>
       </div>
     </div>
   </section>
 
+  <!-- HOW IT WORKS — principles animate in with stagger -->
   <section class="s3-howit">
     <div class="s3-howit-inner">
       <span class="s3-tag">How It Works</span>
       <h2 class="s3-howit-h">Three principles. One reliable outcome.</h2>
       <div class="s3-blocks">
-        <div class="s3-block"><span class="s3-bnum">01</span><div class="s3-bt">Transfer of Trust</div><p class="s3-bd">When a trusted person introduces you, their credibility transfers. You walk into every conversation already ahead. No convincing required.</p></div>
-        <div class="s3-block"><span class="s3-bnum">02</span><div class="s3-bt">The Right People, Not a Ton of People</div><p class="s3-bd">Two well-chosen introductions beat a room of 200 every time. We filter so members don't waste conversations.</p></div>
-        <div class="s3-block"><span class="s3-bnum">03</span><div class="s3-bt">Stay in Front of Them, It Compounds</div><p class="s3-bd">Introductions build month after month. Members who work the framework see referral networks grow in ways cold outreach never could.</p></div>
+        <div class="s3-block js-reveal" data-delay="1"><span class="s3-bnum">01</span><div class="s3-bt">Transfer of Trust</div><p class="s3-bd">When a trusted person introduces you, their credibility transfers. You walk into every conversation already ahead. No convincing required.</p></div>
+        <div class="s3-block js-reveal" data-delay="2"><span class="s3-bnum">02</span><div class="s3-bt">The Right People, Not a Ton of People</div><p class="s3-bd">Two well-chosen introductions beat a room of 200 every time. We filter so members don't waste conversations.</p></div>
+        <div class="s3-block js-reveal" data-delay="3"><span class="s3-bnum">03</span><div class="s3-bt">Stay in Front of Them, It Compounds</div><p class="s3-bd">Introductions build month after month. Members who work the framework see referral networks grow in ways cold outreach never could.</p></div>
       </div>
     </div>
   </section>
 
+  <!-- WHO IT'S FOR — checklist slides in from left -->
   <section class="s3-who">
     <div class="s3-who-inner">
       <div class="s3-who-top">
@@ -355,18 +426,18 @@ body{
       </div>
       <div class="s3-who-cols">
         <div>
-          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>B2B business owners, founders, CEOs</span></div>
-          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Fractional CFO / COO / CMO / CTO</span></div>
-          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Coaches, consultants, agency owners</span></div>
-          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Accountants, CPAs, insurance professionals</span></div>
-          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>$500K–$5M revenue stage</span></div>
+          <div class="s3-who-item js-reveal-left" data-delay="1"><span class="s3-who-chk">✓</span><span>B2B business owners, founders, CEOs</span></div>
+          <div class="s3-who-item js-reveal-left" data-delay="2"><span class="s3-who-chk">✓</span><span>Fractional CFO / COO / CMO / CTO</span></div>
+          <div class="s3-who-item js-reveal-left" data-delay="3"><span class="s3-who-chk">✓</span><span>Coaches, consultants, agency owners</span></div>
+          <div class="s3-who-item js-reveal-left" data-delay="4"><span class="s3-who-chk">✓</span><span>Accountants, CPAs, insurance professionals</span></div>
+          <div class="s3-who-item js-reveal-left" data-delay="5"><span class="s3-who-chk">✓</span><span>$500K–$5M revenue stage</span></div>
         </div>
         <div>
-          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Marketing, digital, and web professionals</span></div>
-          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>AI consultants and tech services</span></div>
-          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Attorneys and legal professionals</span></div>
-          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Service businesses who grow through relationships</span></div>
-          <div class="s3-who-item"><span class="s3-who-chk">✓</span><span>Anyone who can do business from anywhere</span></div>
+          <div class="s3-who-item js-reveal-left" data-delay="1"><span class="s3-who-chk">✓</span><span>Marketing, digital, and web professionals</span></div>
+          <div class="s3-who-item js-reveal-left" data-delay="2"><span class="s3-who-chk">✓</span><span>AI consultants and tech services</span></div>
+          <div class="s3-who-item js-reveal-left" data-delay="3"><span class="s3-who-chk">✓</span><span>Attorneys and legal professionals</span></div>
+          <div class="s3-who-item js-reveal-left" data-delay="4"><span class="s3-who-chk">✓</span><span>Service businesses who grow through relationships</span></div>
+          <div class="s3-who-item js-reveal-left" data-delay="5"><span class="s3-who-chk">✓</span><span>Anyone who can do business from anywhere</span></div>
         </div>
       </div>
     </div>
@@ -384,14 +455,24 @@ body{
     <div class="s3-aphoto"></div>
   </section>
 
+  <!-- THE MATH — stat numbers count up on scroll -->
   <section class="s3-math">
     <div class="s3-math-inner">
       <span class="s3-tag">The Math</span>
       <h2 class="s3-math-hl">Run it the way a business owner would.<br><span>If just one connection lands, what's it worth?</span></h2>
       <div class="s3-stats">
-        <div class="s3-stat"><span class="s3-snum">104</span><span class="s3-slbl">Warm intros per year</span></div>
-        <div class="s3-stat"><span class="s3-snum">5,000+</span><span class="s3-slbl">One-to-ones by Phil</span></div>
-        <div class="s3-stat"><span class="s3-snum">0</span><span class="s3-slbl">Weekly meetings required</span></div>
+        <div class="s3-stat js-reveal" data-delay="1">
+          <span class="s3-snum" data-count-target="104" data-count-suffix="">104</span>
+          <span class="s3-slbl">Warm intros per year</span>
+        </div>
+        <div class="s3-stat js-reveal" data-delay="2">
+          <span class="s3-snum" data-count-target="5000" data-count-suffix="+">5,000+</span>
+          <span class="s3-slbl">One-to-ones by Phil</span>
+        </div>
+        <div class="s3-stat js-reveal" data-delay="3">
+          <span class="s3-snum">0</span>
+          <span class="s3-slbl">Weekly meetings required</span>
+        </div>
       </div>
       <p class="s3-math-body">For most members, one single connection turning into a client is a six-figure answer. <strong>The real question was never the price. It's whether you'd rather have Phil's team out there finding your next partner every week, or keep trying to carve out the time yourself.</strong></p>
     </div>
@@ -409,20 +490,22 @@ body{
     </div>
   </section>
 
+  <!-- FINAL CTA — scale + fade reveal -->
   <section class="s3-final">
     <span class="s3-tag-d" style="text-align:center;display:block;">The Next Step</span>
-    <h2 class="s3-final-big">You're one<br>connection away.</h2>
-    <p class="s3-final-sub">Request your invite. Let's start putting the right people in front of you.</p>
-    <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;">
+    <h2 class="s3-final-big js-reveal-scale">You're one<br>connection away.</h2>
+    <p class="s3-final-sub js-reveal" data-delay="1">Request your invite. Let's start putting the right people in front of you.</p>
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;" class="js-reveal" data-delay="2">
       <a href="https://app.nolodex.com/request-invite?community=62586ba2-0a0d-4ca5-a983-dc0cfab13e44&group=7804e36a-5b33-417e-9dc5-74ae59221973" class="c-btn-primary" style="font-size:15px;padding:16px 44px;">Request My Invite</a>
       <a href="https://link.theconnectorcommunity.com/widget/bookings/phil-the-connector-brian-hong" class="c-btn-secondary" style="border-color:rgba(240,236,228,.25);color:rgba(240,236,228,.5)!important;">Book a Call First</a>
     </div>
-    <p class="s3-final-micro">Worldwide. Warm introductions only. No cold pitches, ever.</p>
+    <p class="s3-final-micro js-reveal" data-delay="3">Worldwide. Warm introductions only. No cold pitches, ever.</p>
   </section>
 
   <footer class="c-footer">&copy; 2025 The Connector Community &nbsp;|&nbsp; Phil Herrington &amp; Brian Hong &nbsp;|&nbsp; Worldwide</footer>
 
 <script>
+// FAQ accordion
 document.addEventListener('click', e => {
   const q = e.target.closest('.faq-q');
   if (!q) return;
@@ -431,6 +514,46 @@ document.addEventListener('click', e => {
   document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
   if (!isOpen) item.classList.add('open');
 });
+
+// Scroll-reveal via IntersectionObserver
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.js-reveal, .js-reveal-left, .js-reveal-scale')
+  .forEach(el => revealObserver.observe(el));
+
+// Count-up animation for stat numbers
+function countUp(el, target, suffix, duration) {
+  const start = performance.now();
+  (function tick(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const value = Math.round(ease * target);
+    el.textContent = value.toLocaleString() + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  })(start);
+}
+
+const countObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseFloat(el.dataset.countTarget);
+      const suffix = el.dataset.countSuffix || '';
+      countUp(el, target, suffix, 1800);
+      countObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('[data-count-target]')
+  .forEach(el => countObserver.observe(el));
 </script>
 </body>
 </html>
