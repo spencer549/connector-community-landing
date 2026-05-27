@@ -68,6 +68,29 @@ body{
 .s3-qcols strong{color:#f0ece4;}
 .s3-qclose{font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:var(--rust-l);margin-top:8px;display:block;}
 
+/* Attribution portrait */
+.s3-pw-attr{
+  display:flex;align-items:center;gap:20px;
+  margin-top:52px;padding-top:36px;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+.s3-pw-attr-img{
+  width:96px;height:96px;border-radius:50%;flex-shrink:0;
+  background-image:url('https://www.philtheconnector.com/images/245fce6f0a6fbfae6355af9d7eac1783c4381029.jpg');
+  background-size:cover;background-position:center top;
+  border:2px solid rgba(184,73,26,.45);
+  box-shadow:0 0 0 5px rgba(184,73,26,.1);
+}
+.s3-pw-attr-name{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:17px;color:rgba(240,236,228,.88);
+  display:block;margin-bottom:5px;
+}
+.s3-pw-attr-role{
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  font-weight:800;color:var(--rust-l);
+}
+
 /* GAP */
 .s3-gap{display:grid;grid-template-columns:1fr 1fr;min-height:560px;}
 .s3-gap-l{background:var(--bg3);padding:100px 72px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
@@ -115,7 +138,35 @@ body{
 /* HOW IT WORKS */
 .s3-howit{padding:100px 80px;background:var(--bg);}
 .s3-howit-inner{max-width:1100px;margin:0 auto;}
-.s3-howit-h{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;color:var(--text);margin-bottom:52px;line-height:1.15;}
+.s3-howit-h{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;color:var(--text);margin-bottom:40px;line-height:1.15;}
+
+.s3-howit-scene{
+  width:100%;height:320px;
+  border-radius:8px;overflow:hidden;
+  margin-bottom:52px;
+  position:relative;
+  background-image:url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=80');
+  background-size:cover;
+  background-position:center 35%;
+}
+.s3-howit-scene::before{
+  content:'';position:absolute;inset:0;z-index:1;
+  background:linear-gradient(to right,rgba(24,20,16,.55) 0%,rgba(24,20,16,.15) 55%,transparent 100%);
+}
+.s3-howit-scene-text{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:28px 36px;z-index:2;
+}
+.s3-howit-scene-label{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:15px;color:rgba(240,236,228,.65);
+  display:block;margin-bottom:4px;
+}
+.s3-howit-scene-sub{
+  font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  font-weight:800;color:var(--rust-l);
+}
+
 .s3-blocks{display:grid;grid-template-columns:repeat(3,1fr);border-top:3px solid var(--rust);}
 .s3-block{padding:48px 40px 48px 0;border-right:1px solid var(--border);}
 .s3-block:last-child{border-right:none;padding-right:0;}
@@ -125,8 +176,20 @@ body{
 .s3-bd{font-size:15px;color:var(--muted);line-height:1.75;}
 
 /* WHO IT'S FOR */
-.s3-who{background:var(--dark);padding:100px 80px;position:relative;overflow:hidden;}
-.s3-who::before{content:'WHO';position:absolute;right:-20px;top:50%;transform:translateY(-50%);font-family:'Playfair Display',serif;font-size:260px;font-weight:700;color:rgba(255,255,255,.025);line-height:1;pointer-events:none;user-select:none;}
+.s3-who{
+  background:var(--dark);
+  background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1920&q=80');
+  background-size:cover;
+  background-position:center;
+  padding:100px 80px;
+  position:relative;overflow:hidden;
+}
+.s3-who::before{
+  content:'';
+  position:absolute;inset:0;
+  background:rgba(24,20,16,.89);
+  z-index:0;
+}
 .s3-who-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1;}
 .s3-who-top{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:56px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.08);}
 .s3-who-tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:var(--rust);margin-bottom:20px;display:block;}
@@ -177,7 +240,6 @@ body{
    ANIMATIONS
    ============================================================ */
 
-/* Hero load-in sequence */
 @keyframes heroFadeUp{
   from{opacity:0;transform:translateY(26px)}
   to{opacity:1;transform:translateY(0)}
@@ -194,7 +256,6 @@ body{
 .c-hero-left .c-cta-row  {animation:heroFadeUp .55s ease .95s  both;}
 .c-hero-left .c-micro    {animation:heroFadeUp .45s ease 1.15s both;}
 
-/* Scroll-reveal base states */
 .js-reveal{
   opacity:0;
   transform:translateY(28px);
@@ -216,7 +277,6 @@ body{
 }
 .js-reveal-scale.revealed{opacity:1;transform:scale(1) translateY(0);}
 
-/* Stagger delays */
 [data-delay="1"]{transition-delay:.08s;}
 [data-delay="2"]{transition-delay:.2s;}
 [data-delay="3"]{transition-delay:.34s;}
@@ -227,7 +287,6 @@ body{
 [data-delay="8"]{transition-delay:.54s;}
 [data-delay="9"]{transition-delay:.7s;}
 
-/* Respect prefers-reduced-motion */
 @media(prefers-reduced-motion:reduce){
   .c-hero-left .c-eyebrow,
   .c-hero-left .c-h1,
@@ -254,9 +313,11 @@ body{
   .s3-philword{padding:44px 24px;}
   .s3-bigqm{font-size:56px;line-height:1;}
   .s3-qlead{font-size:clamp(18px,4.5vw,24px);margin-bottom:24px;line-height:1.3;}
-  .s3-qcols{grid-template-columns:1fr 1fr;gap:16px;}
+  .s3-qcols{grid-template-columns:1fr;gap:0;}
   .s3-qcols p{font-size:13px;line-height:1.6;margin-bottom:8px;}
   .s3-qclose{font-size:14px;}
+  .s3-pw-attr{margin-top:32px;padding-top:24px;}
+  .s3-pw-attr-img{width:72px;height:72px;}
   .s3-gap{grid-template-columns:1fr;}
   .s3-gap-l{padding:40px 24px 32px;}
   .s3-gap-l::before{display:none;}
@@ -274,6 +335,7 @@ body{
   .s3-tile{padding:24px 16px;}
   .s3-tile-n{font-size:36px;margin-bottom:10px;}
   .s3-howit{padding:44px 24px;}
+  .s3-howit-scene{height:200px;margin-bottom:32px;}
   .s3-blocks{grid-template-columns:1fr 1fr;border-top:none;gap:1px;background:var(--border);}
   .s3-block{border-right:none;border-top:3px solid var(--rust);padding:20px 16px;background:var(--bg);}
   .s3-block:last-child{grid-column:1/-1;}
@@ -285,7 +347,6 @@ body{
   .s3-who-note{font-size:14px;}
   .s3-who-cols{grid-template-columns:1fr 1fr;gap:0 20px;}
   .s3-who-item{font-size:13px;padding:11px 0;}
-  .s3-who::before{display:none;}
   .s3-about{grid-template-columns:1fr;}
   .s3-aphoto{display:none;}
   .s3-atext{padding:44px 24px;}
@@ -341,6 +402,13 @@ body{
           <span class="s3-qclose"><strong>The real question: do you want us out there finding your next partner while you stay focused on running the thing?</strong></span>
         </div>
       </div>
+      <div class="s3-pw-attr">
+        <div class="s3-pw-attr-img"></div>
+        <div>
+          <span class="s3-pw-attr-name">Phil Herrington</span>
+          <span class="s3-pw-attr-role">The Connector — 40 years, 5,000+ one-to-ones</span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -387,7 +455,6 @@ body{
     </div>
   </section>
 
-  <!-- WHAT YOU GET — tiles animate in with stagger -->
   <section class="s3-get">
     <div class="s3-get-inner">
       <span class="s3-tag-d">What You Get As A Member</span>
@@ -401,11 +468,16 @@ body{
     </div>
   </section>
 
-  <!-- HOW IT WORKS — principles animate in with stagger -->
   <section class="s3-howit">
     <div class="s3-howit-inner">
       <span class="s3-tag">How It Works</span>
       <h2 class="s3-howit-h">Three principles. One reliable outcome.</h2>
+      <div class="s3-howit-scene js-reveal">
+        <div class="s3-howit-scene-text">
+          <span class="s3-howit-scene-label">"The right introduction changes everything."</span>
+          <span class="s3-howit-scene-sub">The Connector Community</span>
+        </div>
+      </div>
       <div class="s3-blocks">
         <div class="s3-block js-reveal" data-delay="1"><span class="s3-bnum">01</span><div class="s3-bt">Transfer of Trust</div><p class="s3-bd">When a trusted person introduces you, their credibility transfers. You walk into every conversation already ahead. No convincing required.</p></div>
         <div class="s3-block js-reveal" data-delay="2"><span class="s3-bnum">02</span><div class="s3-bt">The Right People, Not a Ton of People</div><p class="s3-bd">Two well-chosen introductions beat a room of 200 every time. We filter so members don't waste conversations.</p></div>
@@ -414,7 +486,6 @@ body{
     </div>
   </section>
 
-  <!-- WHO IT'S FOR — checklist slides in from left -->
   <section class="s3-who">
     <div class="s3-who-inner">
       <div class="s3-who-top">
@@ -455,7 +526,6 @@ body{
     <div class="s3-aphoto"></div>
   </section>
 
-  <!-- THE MATH — stat numbers count up on scroll -->
   <section class="s3-math">
     <div class="s3-math-inner">
       <span class="s3-tag">The Math</span>
@@ -490,7 +560,6 @@ body{
     </div>
   </section>
 
-  <!-- FINAL CTA — scale + fade reveal -->
   <section class="s3-final">
     <span class="s3-tag-d" style="text-align:center;display:block;">The Next Step</span>
     <h2 class="s3-final-big js-reveal-scale">You're one<br>connection away.</h2>
@@ -505,7 +574,6 @@ body{
   <footer class="c-footer">&copy; 2025 The Connector Community &nbsp;|&nbsp; Phil Herrington &amp; Brian Hong &nbsp;|&nbsp; Worldwide</footer>
 
 <script>
-// FAQ accordion
 document.addEventListener('click', e => {
   const q = e.target.closest('.faq-q');
   if (!q) return;
@@ -515,7 +583,6 @@ document.addEventListener('click', e => {
   if (!isOpen) item.classList.add('open');
 });
 
-// Scroll-reveal via IntersectionObserver
 const revealObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -528,7 +595,6 @@ const revealObserver = new IntersectionObserver(entries => {
 document.querySelectorAll('.js-reveal, .js-reveal-left, .js-reveal-scale')
   .forEach(el => revealObserver.observe(el));
 
-// Count-up animation for stat numbers
 function countUp(el, target, suffix, duration) {
   const start = performance.now();
   (function tick(now) {
